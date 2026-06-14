@@ -162,7 +162,7 @@ export async function createTicket(guild, member, categoryId, reason = 'No reaso
     
     const embed = createEmbed({
       title: `Ticket #${ticketNumber}`,
-      description: `${member.toString()}, Support has been notified and will assist you shortly. If you wish to close this ticket, select Close Ticket."`,
+      description: `${member.toString()}, Support has been notified and will assist you shortly. If you wish to close this ticket, select "Close Ticket".`,
       color: priorityInfo.color,
       fields: [
         { name: 'Status', value: '🟢 Open', inline: true },
