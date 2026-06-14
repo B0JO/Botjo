@@ -163,7 +163,7 @@ async function updateLivePanel(client, guild, config) {
         if (!panelMsg) return false;
 
         const updatedEmbed = new EmbedBuilder()
-            .setTitle('🎫 Support Tickets')
+            .setTitle('⚔️ Apply for Recruiter Staff ⚔️Click the button below to open a private ticket. Fill out the application template and prepare your TSB kill screenshot')
             .setDescription(config.ticketPanelMessage || 'Click the button below to create a support ticket.')
             .setColor(getColor('info'));
 
