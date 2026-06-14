@@ -95,12 +95,16 @@ async function ensureTicketPermission(interaction, client, actionLabel, options 
   return context;
 }
 
+// ─── CREATE TICKET ────────────────────────────────────────────────────────────
+// Modal removed — tickets now open instantly when the button is clicked.
+
 const createTicketHandler = {
   name: 'create_ticket',
   async execute(interaction, client) {
     try {
       if (!(await ensureGuildContext(interaction))) return;
 
+      // Rate limit check
       const rateLimitKey = `${interaction.user.id}:create_ticket`;
       const allowed = await checkRateLimit(rateLimitKey, 3, 60000);
       if (!allowed) {
@@ -111,12 +115,13 @@ const createTicketHandler = {
         return;
       }
 
+      // Ticket limit check
       const config = await getGuildConfig(client, interaction.guildId);
       const maxTicketsPerUser = config.maxTicketsPerUser || 3;
-      
+
       const { getUserTicketCount } = await import('../services/ticket.js');
       const currentTicketCount = await getUserTicketCount(interaction.guildId, interaction.user.id);
-      
+
       if (currentTicketCount >= maxTicketsPerUser) {
         return await interaction.reply({
           embeds: [
@@ -128,29 +133,38 @@ const createTicketHandler = {
           flags: MessageFlags.Ephemeral
         });
       }
-      
-      const modal = new ModalBuilder()
-        .setCustomId('create_ticket_modal')
-        .setTitle('Create a Ticket');
 
-      const reasonInput = new TextInputBuilder()
-        .setCustomId('reason')
-        .setLabel('Why are you creating this ticket?')
-        .setStyle(TextInputStyle.Paragraph)
-        .setPlaceholder('Describe your issue...')
-        .setRequired(true)
-        .setMaxLength(1000);
+      // Defer and create the ticket immediately — no modal
+      const deferSuccess = await InteractionHelper.safeDefer(interaction, { flags: MessageFlags.Ephemeral });
+      if (!deferSuccess) return;
 
-      const actionRow = new ActionRowBuilder().addComponents(reasonInput);
-      modal.addComponents(actionRow);
-      
-      // showModal must be called directly without defer
-      await interaction.showModal(modal);
+      const result = await createTicket(
+        interaction.guild,
+        interaction.member,
+        config.ticketCategoryId || null,
+        null  // no reason required
+      );
+
+      if (result.success) {
+        await interaction.editReply({
+          embeds: [successEmbed('Ticket Created', `Your ticket has been created in ${result.channel}!`)]
+        });
+      } else {
+        await interaction.editReply({
+          embeds: [errorEmbed('Error', result.error || 'Failed to create ticket.')],
+          flags: MessageFlags.Ephemeral
+        });
+      }
     } catch (error) {
-      logger.error('Error creating ticket modal:', error);
+      logger.error('Error creating ticket:', error);
       if (!interaction.replied && !interaction.deferred) {
         await interaction.reply({
-          embeds: [errorEmbed('Error', 'Could not open ticket creation form.')],
+          embeds: [errorEmbed('Error', 'Could not create your ticket.')],
+          flags: MessageFlags.Ephemeral
+        });
+      } else if (interaction.deferred) {
+        await interaction.editReply({
+          embeds: [errorEmbed('Error', 'Could not create your ticket.')],
           flags: MessageFlags.Ephemeral
         });
       }
@@ -158,6 +172,7 @@ const createTicketHandler = {
   }
 };
 
+// Kept for backwards compatibility but no longer triggered (modal removed above).
 const createTicketModalHandler = {
   name: 'create_ticket_modal',
   async execute(interaction, client) {
@@ -207,13 +222,12 @@ const closeTicketHandler = {
     try {
       if (!(await ensureGuildContext(interaction))) return;
 
-      // Use timeout-aware permission check to prevent interaction expiration
       const permissionCheck = await checkTicketPermissionWithTimeout(
         interaction,
         client,
         'close this ticket',
         { allowTicketCreator: true },
-        2000 // 2 second timeout for permission checks
+        2000
       );
 
       if (!permissionCheck.success) {
@@ -241,7 +255,6 @@ const closeTicketHandler = {
       const actionRow = new ActionRowBuilder().addComponents(reasonInput);
       modal.addComponents(actionRow);
 
-      // showModal must be called directly without defer
       await interaction.showModal(modal);
     } catch (error) {
       logger.error('Error closing ticket:', error);
@@ -262,7 +275,6 @@ const closeTicketModalHandler = {
     try {
       if (!(await ensureGuildContext(interaction))) return;
 
-      // Use timeout-aware permission check 
       const permissionCheck = await checkTicketPermissionWithTimeout(
         interaction,
         client,
@@ -478,15 +490,13 @@ const pinTicketHandler = {
         return;
       }
 
-      // Check if channel name already has ping emoji
       const hasPingEmoji = channel.name.startsWith('📌');
       
       if (hasPingEmoji) {
-        // Unpin: remove emoji and update position
         const newName = channel.name.replace(/^📌\s*/, '');
         await channel.edit({ 
           name: newName,
-          position: 999 // Move to end
+          position: 999
         });
 
         await interaction.editReply({
@@ -505,11 +515,10 @@ const pinTicketHandler = {
           userId: interaction.user.id
         });
       } else {
-        // Pin: add emoji and update position
         const newName = `📌 ${channel.name}`;
         await channel.edit({ 
           name: newName,
-          position: 0 // Move to top
+          position: 0
         });
 
         await interaction.editReply({
@@ -689,7 +698,6 @@ const deleteTicketHandler = {
     try {
       if (!(await ensureGuildContext(interaction))) return;
 
-      // Use timeout-aware permission check
       const permissionCheck = await checkTicketPermissionWithTimeout(
         interaction,
         client,
@@ -754,7 +762,3 @@ export {
   reopenTicketHandler,
   deleteTicketHandler 
 };
-
-
-
-
