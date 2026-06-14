@@ -11,23 +11,16 @@ export const botConfig = {
   // - "dnd"       = red do-not-disturb
   // - "invisible" = appears offline
   presence: {
-    // Current online state shown on Discord.
     status: "online",
 
     // Activity lines shown under the bot name.
     // `type` number mapping from Discord:
-    // 0 = Playing
-    // 1 = Streaming
-    // 2 = Listening
-    // 3 = Watching
-    // 4 = Custom
-    // 5 = Competing
+    // 0 = Playing | 1 = Streaming | 2 = Listening
+    // 3 = Watching | 4 = Custom  | 5 = Competing
     activities: [
       {
-        // Text users will see (example: "Playing With bojo").
-        name: "With bojo",
-        // Activity type number (0 = Playing).
-        type: 0,
+        name: "/help | Botjo",
+        type: 3, // Watching
       },
     ],
   },
@@ -37,7 +30,6 @@ export const botConfig = {
   // =========================
   commands: {
     // Bot owner user IDs (comma-separated in OWNER_IDS env var).
-    // Owners can access owner/admin-level bot commands.
     owners: ["642757440340885555"],
 
     // Default wait time between command uses (in seconds).
@@ -54,13 +46,13 @@ export const botConfig = {
   // APPLICATIONS SYSTEM
   // =========================
   applications: {
-    // Default questions shown when someone fills out an application.
+    // Questions shown when someone fills out an application.
     defaultQuestions: [
       { question: "What is your Discord username?", required: true },
       { question: "How old are you?", required: true },
       { question: "Why do you want this position?", required: true },
-      { question: "Do you have previous experience?", required: true },
-      { question: "How active can you be?", required: true },
+      { question: "Do you have any prior experience in this role?", required: true },
+      { question: "How many hours per week can you commit to this server?", required: true },
     ],
 
     // Embed colors by application status.
@@ -90,10 +82,10 @@ export const botConfig = {
   embeds: {
     colors: {
       // Main brand colors.
-      primary: "#5865F2",
-      secondary: "#2F3136",
+      primary: "#5865F2",   // Discord blurple — clean & recognizable
+      secondary: "#2F3136", // Discord dark surface
 
-      // Standard status colors for success/error/warning/info messages.
+      // Standard status colors.
       success: "#57F287",
       error: "#ED4245",
       warning: "#FEE75C",
@@ -137,15 +129,13 @@ export const botConfig = {
       },
     },
     footer: {
-      // Default footer text used in bot embeds.
-      text: "Botjo",
-      // Footer icon URL (null = no icon).
+      // Footer shown on every embed.
+      text: "Botjo • Reliable & Powerful",
       icon: null,
     },
     // Default thumbnail URL for embeds (null = no thumbnail).
     thumbnail: null,
     author: {
-      // Optional default embed author block.
       name: "Botjo",
       icon: null,
       url: null,
@@ -157,18 +147,15 @@ export const botConfig = {
   // =========================
   economy: {
     currency: {
-      // Currency display name.
       name: "Robux",
-      // Plural display name.
       namePlural: "Robux",
-      // Currency symbol shown in balances.
       symbol: "R$",
     },
 
     // Starting balance for new users.
     startingBalance: 100,
 
-    // Maximum bank amount before upgrades (if upgrades are used).
+    // Maximum bank amount before upgrades.
     baseBankCapacity: 250000,
 
     // Daily reward amount.
@@ -193,7 +180,6 @@ export const botConfig = {
   // =========================
   // SHOP SETTINGS
   // =========================
-  // Add shop defaults here when needed.
   shop: {
 
   },
@@ -289,8 +275,8 @@ export const botConfig = {
   // =========================
   // VERIFICATION SETTINGS
   // =========================
-  // Verification is disabled. To re-enable, set enabled: true and restore
-  // the full config block (autoVerify, cooldowns, audit settings, etc.).
+  // Verification is currently disabled.
+  // To re-enable, set enabled: true and restore the full config block.
   verification: {
     enabled: false,
   },
@@ -299,14 +285,12 @@ export const botConfig = {
   // WELCOME / GOODBYE MESSAGES
   // =========================
   welcome: {
-    // Welcome template posted when a user joins.
     // Placeholders: {user}, {server}, {memberCount}
     defaultWelcomeMessage:
-      "🎉 Welcome {user} to {server}! Enjoy your stay.",
-    // Goodbye template posted when a user leaves.
+      "👋 Welcome to **{server}**, {user}! Please read our rules and enjoy your stay. You are member **#{memberCount}**.",
     // Placeholders: {user}, {memberCount}
     defaultGoodbyeMessage:
-      "👋 {user} has left the server. We hope to see you again.",
+      "📤 **{user}** has left **{server}**. We now have **{memberCount}** members.",
     // Channel ID for welcome messages.
     defaultWelcomeChannel: null,
     // Channel ID for goodbye messages.
@@ -318,28 +302,21 @@ export const botConfig = {
   // =========================
   counters: {
     defaults: {
-      // Default naming/description templates for counter entries.
       name: "{name} Counter",
       description: "Server {name} counter",
-      // Channel type used for counters (typically "voice").
       type: "voice",
-      // Channel name format. `{count}` is replaced automatically.
       channelName: "{name}-{count}",
     },
     permissions: {
-      // Default denied permissions for the counter channel.
       deny: ["VIEW_CHANNEL"],
-      // Default allowed permissions for the counter channel.
       allow: ["VIEW_CHANNEL", "CONNECT", "SPEAK"],
     },
     messages: {
-      // Default response messages for counter actions.
-      created: "✅ Created counter **{name}**",
-      deleted: "🗑️ Deleted counter **{name}**",
-      updated: "🔄 Updated counter **{name}**",
+      created: "✅ Successfully created counter **{name}**.",
+      deleted: "🗑️ Counter **{name}** has been deleted.",
+      updated: "🔄 Counter **{name}** has been updated.",
     },
     types: {
-      // Built-in counter types and how each count is calculated.
       members: {
         name: "👥 Members",
         description: "Total members in the server",
@@ -364,13 +341,18 @@ export const botConfig = {
   // GENERIC BOT MESSAGES
   // =========================
   messages: {
-    noPermission: "You do not have permission to use this command.",
-    cooldownActive: "Please wait {time} before using this command again.",
-    errorOccurred: "An error occurred while executing this command.",
+    noPermission:
+      "🔒 You do not have the required permissions to use this command.",
+    cooldownActive:
+      "⏳ Please wait **{time}** before using this command again.",
+    errorOccurred:
+      "⚠️ An unexpected error occurred. If this persists, please contact a staff member.",
     missingPermissions:
-      "I am missing required permissions to perform this action.",
-    commandDisabled: "This command has been disabled.",
-    maintenanceMode: "The bot is currently in maintenance mode.",
+      "⛔ I am missing the required permissions to perform this action.",
+    commandDisabled:
+      "🚫 This command is currently disabled.",
+    maintenanceMode:
+      "🔧 Botjo is currently undergoing maintenance. Please try again later.",
   },
 
   // =========================
@@ -467,7 +449,6 @@ export function getColor(path, fallback = "#99AAB5") {
       botConfig.embeds.colors,
     );
 
-  // Convert the result to integer if it's a hex string
   if (typeof result === "string" && result.startsWith("#")) {
     return parseInt(result.replace("#", ""), 16);
   }
