@@ -8,7 +8,7 @@ import { getColor } from '../../config/bot.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 export default {
     data: new SlashCommandBuilder()
-    .setName("purge")
+    .setName("clear")
     .setDescription("Delete a specific amount of messages")
     .addIntegerOption((option) =>
       option
@@ -25,7 +25,7 @@ export default {
       logger.warn(`Purge interaction defer failed`, {
         userId: interaction.user.id,
         guildId: interaction.guildId,
-        commandName: 'purge'
+        commandName: 'clear'
       });
       return;
     }
@@ -35,7 +35,7 @@ export default {
         embeds: [
           errorEmbed(
             "Permission Denied",
-            "You need the `Manage Messages` permission to purge messages.",
+            "You need the `Manage Messages` permission to clear messages.",
           ),
         ],
       });
@@ -61,7 +61,7 @@ export default {
         return await InteractionHelper.safeEditReply(interaction, {
           embeds: [
             warningEmbed(
-              "You're purging messages too fast. Please wait a minute before trying again.",
+              "You're clearing messages too fast. Please wait a minute before trying again.",
               "⏳ Rate Limited"
             ),
           ],
@@ -74,7 +74,7 @@ export default {
       const deletedCount = deleted.size;
 
       const purgeEmbed = createEmbed(
-        "🗑️ Messages Purged (Action Log)",
+        "🗑️ Messages cleared (Action Log)",
         `${deletedCount} messages were deleted by ${interaction.user}.`,
       )
 .setColor(getColor('moderation'))
@@ -92,7 +92,7 @@ export default {
         client,
         guild: interaction.guild,
         event: {
-          action: "Messages Purged",
+          action: "Messages cleared",
           target: `${channel} (${deletedCount} messages)`,
           executor: `${interaction.user.tag} (${interaction.user.id})`,
           reason: `Deleted ${deletedCount} messages`,
@@ -118,7 +118,7 @@ flags: MessageFlags.Ephemeral,
         );
       }, 3000);
     } catch (error) {
-      logger.error('Purge command error:', error);
+      logger.error('clear command error:', error);
       await InteractionHelper.safeEditReply(interaction, {
         embeds: [
           errorEmbed(
