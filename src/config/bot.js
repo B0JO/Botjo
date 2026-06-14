@@ -24,10 +24,10 @@ export const botConfig = {
     // 5 = Competing
     activities: [
       {
-        // Text users will see (example: "Playing /help | Titan Bot").
-        name: "Made with ❤️",
+        // Text users will see (example: "Playing With bojo").
+        name: "With bojo",
         // Activity type number (0 = Playing).
-        type: 0, 
+        type: 0,
       },
     ],
   },
@@ -38,10 +38,10 @@ export const botConfig = {
   commands: {
     // Bot owner user IDs (comma-separated in OWNER_IDS env var).
     // Owners can access owner/admin-level bot commands.
-    owners: process.env.OWNER_IDS?.split(",") || [],
+    owners: ["642757440340885555"],
 
     // Default wait time between command uses (in seconds).
-    defaultCooldown: 3, 
+    defaultCooldown: 3,
 
     // If true, old commands are removed before re-registering.
     deleteCommands: false,
@@ -56,26 +56,28 @@ export const botConfig = {
   applications: {
     // Default questions shown when someone fills out an application.
     defaultQuestions: [
-      { question: "What is your name?", required: true },
+      { question: "What is your Discord username?", required: true },
       { question: "How old are you?", required: true },
-      { question: "Why do you want to join?", required: true },
+      { question: "Why do you want this position?", required: true },
+      { question: "Do you have previous experience?", required: true },
+      { question: "How active can you be?", required: true },
     ],
 
     // Embed colors by application status.
     statusColors: {
-      pending: "#FFA500",
-      approved: "#00FF00",
-      denied: "#FF0000",
+      pending: "#FEE75C",
+      approved: "#57F287",
+      denied: "#ED4245",
     },
 
     // How long users must wait before submitting another application (hours).
-    applicationCooldown: 24, 
+    applicationCooldown: 24,
 
     // Auto-delete denied applications after this many days.
-    deleteDeniedAfter: 7, 
+    deleteDeniedAfter: 7,
 
     // Auto-delete approved applications after this many days.
-    deleteApprovedAfter: 30, 
+    deleteApprovedAfter: 30,
 
     // Role IDs allowed to manage applications.
     managerRoles: [], // Will be populated from environment or database
@@ -88,14 +90,14 @@ export const botConfig = {
   embeds: {
     colors: {
       // Main brand colors.
-      primary: "#336699", 
-      secondary: "#2F3136", 
+      primary: "#5865F2",
+      secondary: "#2F3136",
 
       // Standard status colors for success/error/warning/info messages.
-      success: "#57F287", 
-      error: "#ED4245", 
-      warning: "#FEE75C", 
-      info: "#3498DB", 
+      success: "#57F287",
+      error: "#ED4245",
+      warning: "#FEE75C",
+      info: "#3498DB",
 
       // Neutral utility colors.
       light: "#FFFFFF",
@@ -121,8 +123,8 @@ export const botConfig = {
         closed: "#ED4245",
         pending: "#99AAB5",
       },
-      economy: "#F1C40F",
-      birthday: "#E91E63",
+      economy: "#5865F2",
+      birthday: "#EB459E",
       moderation: "#9B59B6",
 
       // Ticket priority color mapping.
@@ -136,7 +138,7 @@ export const botConfig = {
     },
     footer: {
       // Default footer text used in bot embeds.
-      text: "Titan Bot",
+      text: "Botjo",
       // Footer icon URL (null = no icon).
       icon: null,
     },
@@ -144,7 +146,7 @@ export const botConfig = {
     thumbnail: null,
     author: {
       // Optional default embed author block.
-      name: null,
+      name: "Botjo",
       icon: null,
       url: null,
     },
@@ -156,36 +158,36 @@ export const botConfig = {
   economy: {
     currency: {
       // Currency display name.
-      name: "coins",
+      name: "Robux",
       // Plural display name.
-      namePlural: "coins",
+      namePlural: "Robux",
       // Currency symbol shown in balances.
-      symbol: "$",
+      symbol: "R$",
     },
 
     // Starting balance for new users.
-    startingBalance: 0,
+    startingBalance: 100,
 
     // Maximum bank amount before upgrades (if upgrades are used).
-    baseBankCapacity: 100000,
+    baseBankCapacity: 250000,
 
     // Daily reward amount.
-    dailyAmount: 100,
+    dailyAmount: 250,
 
     // Work command random payout range.
-    workMin: 10,
-    workMax: 100,
+    workMin: 50,
+    workMax: 500,
 
     // Beg command random payout range.
-    begMin: 5,
-    begMax: 50,
+    begMin: 10,
+    begMax: 100,
 
-    // Chance to succeed when robbing (0.4 = 40%).
-    robSuccessRate: 0.4,
+    // Chance to succeed when robbing (0.45 = 45%).
+    robSuccessRate: 0.45,
 
     // Jail time after failed rob (milliseconds).
     // 3600000 = 1 hour.
-    robFailJailTime: 3600000, 
+    robFailJailTime: 3600000,
   },
 
   // =========================
@@ -193,7 +195,7 @@ export const botConfig = {
   // =========================
   // Add shop defaults here when needed.
   shop: {
-    
+
   },
 
   // =========================
@@ -251,7 +253,7 @@ export const botConfig = {
   giveaways: {
     // Default giveaway duration in milliseconds.
     // 86400000 = 24 hours.
-    defaultDuration: 86400000, 
+    defaultDuration: 86400000,
 
     // Allowed winner count range.
     minimumWinners: 1,
@@ -259,9 +261,9 @@ export const botConfig = {
 
     // Allowed giveaway duration range in milliseconds.
     // 300000 = 5 minutes.
-    minimumDuration: 300000, 
+    minimumDuration: 300000,
     // 2592000000 = 30 days.
-    maximumDuration: 2592000000, 
+    maximumDuration: 2592000000,
 
     // Role IDs allowed to host giveaways.
     allowedRoles: [],
@@ -287,69 +289,10 @@ export const botConfig = {
   // =========================
   // VERIFICATION SETTINGS
   // =========================
+  // Verification is disabled. To re-enable, set enabled: true and restore
+  // the full config block (autoVerify, cooldowns, audit settings, etc.).
   verification: {
-    // Message shown when posting the verification panel.
-    defaultMessage: "Click the button below to verify yourself and gain access to the server!",
-
-    // Text on the verification button.
-    defaultButtonText: "Verify",
-
-    // Automatic verification behavior.
-    autoVerify: {
-      // How automatic verification decides who is auto-approved:
-      // - "none"        = everyone is auto-verified immediately
-      // - "account_age" = account must be older than set days
-      // - "server_size" = auto-verify everyone only in smaller servers
-      defaultCriteria: "none",
-
-      // Days used when `defaultCriteria` is `account_age`.
-      defaultAccountAgeDays: 7,
-
-      // Member count threshold used when `defaultCriteria` is `server_size`.
-      // Example: 1000 means auto-verify if server has fewer than 1000 members.
-      serverSizeThreshold: 1000,
-
-      // Allowed safety limits for account-age requirements.
-      // 1 = minimum day, 365 = maximum days.
-      minAccountAge: 1,      
-      maxAccountAge: 365,    
-
-      // If true, user receives a DM after verification.
-      sendDMNotification: true,
-
-      // Human-readable descriptions for each criteria mode.
-      criteria: {
-        account_age: "Account must be older than specified days",
-        server_size: "All users if server has less than 1000 members",
-        none: "All users immediately"
-      }
-    },
-
-    // Minimum time between verification attempts (milliseconds).
-    // 5000 = 5 seconds.
-    verificationCooldown: 5000,  
-
-    // Maximum failed attempts allowed inside the time window below.
-    maxVerificationAttempts: 3,   
-
-    // Time window for counting attempts (milliseconds).
-    // 60000 = 1 minute.
-    attemptWindow: 60000,          
-
-    // In-memory safety limits (helps avoid unbounded memory growth).
-    maxCooldownEntries: 10000,
-    maxAttemptEntries: 10000,
-    // Cleanup frequency for cooldown/attempt maps (milliseconds).
-    // 300000 = 5 minutes.
-    cooldownCleanupInterval: 300000, 
-    // Maximum metadata payload size for audit entries (bytes).
-    maxAuditMetadataBytes: 4096,
-    // Maximum number of audit entries kept in memory.
-    maxInMemoryAuditEntries: 1000,
-  // If true, log every verification action.
-  logAllVerifications: true,
-  // If true, preserve verification audit history.
-  keepAuditTrail: true,
+    enabled: false,
   },
 
   // =========================
@@ -359,11 +302,11 @@ export const botConfig = {
     // Welcome template posted when a user joins.
     // Placeholders: {user}, {server}, {memberCount}
     defaultWelcomeMessage:
-      "Welcome {user} to {server}! We now have {memberCount} members!",
+      "🎉 Welcome {user} to {server}! Enjoy your stay.",
     // Goodbye template posted when a user leaves.
     // Placeholders: {user}, {memberCount}
     defaultGoodbyeMessage:
-      "{user} has left the server. We now have {memberCount} members.",
+      "👋 {user} has left the server. We hope to see you again.",
     // Channel ID for welcome messages.
     defaultWelcomeChannel: null,
     // Channel ID for goodbye messages.
@@ -449,7 +392,7 @@ export const botConfig = {
     counter: true,
 
     // Security and self-service systems.
-    verification: true,
+    verification: false,
     reactionRoles: true,
     joinToCreate: true,
 
@@ -467,7 +410,6 @@ export const botConfig = {
 export function validateConfig(config) {
   const errors = [];
 
-  
   if (process.env.NODE_ENV !== 'production') {
     logger.debug('Environment variables check:');
     logger.debug('DISCORD_TOKEN exists:', !!process.env.DISCORD_TOKEN);
@@ -486,7 +428,6 @@ export function validateConfig(config) {
     errors.push("Client ID is required (CLIENT_ID environment variable)");
   }
 
-  
   if (process.env.NODE_ENV === 'production') {
     if (!process.env.POSTGRES_HOST) {
       errors.push("PostgreSQL host is required in production (POSTGRES_HOST environment variable)");
@@ -515,10 +456,8 @@ if (configErrors.length > 0) {
 export const BotConfig = botConfig;
 
 export function getColor(path, fallback = "#99AAB5") {
-  
   if (typeof path === "number") return path;
   if (typeof path === "string" && path.startsWith("#")) {
-    
     return parseInt(path.replace("#", ""), 16);
   }
   const result = path
@@ -527,7 +466,7 @@ export function getColor(path, fallback = "#99AAB5") {
       (obj, key) => (obj && obj[key] !== undefined ? obj[key] : fallback),
       botConfig.embeds.colors,
     );
-  
+
   // Convert the result to integer if it's a hex string
   if (typeof result === "string" && result.startsWith("#")) {
     return parseInt(result.replace("#", ""), 16);
@@ -543,6 +482,3 @@ export function getRandomColor() {
 }
 
 export default botConfig;
-
-
-
